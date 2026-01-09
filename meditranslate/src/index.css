@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #f8fafb;
+  color: #1f2937;
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+}
+
+@layer components {
+  .container-max {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .card-shadow {
+    @apply shadow-md hover:shadow-lg transition-shadow;
+  }
+  
+  .text-medical-primary {
+    @apply text-blue-900;
+  }
+  
+  .text-medical-secondary {
+    @apply text-gray-600;
+  }
+}
