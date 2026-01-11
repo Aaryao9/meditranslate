@@ -6,9 +6,10 @@ import {
   getUserChatsController
 } from "../controller/chat.controller";
 import { createChatSchema } from "../dto/chat.dto";
-
+import chatMessageRoutes from "./chatMessage.routes";
 const router = express.Router();
 
+router.use("/:id/messages", chatMessageRoutes);
 router.post(
   "/",
   authenticate,
