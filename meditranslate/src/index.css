@@ -2,37 +2,133 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@layer base {
+  :root {
+    /* Medical white/green theme */
+    --background: 0 0% 99%;
+    --foreground: 160 10% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 160 10% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 160 10% 15%;
+
+    /* Calm medical green */
+    --primary: 158 64% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 158 20% 96%;
+    --secondary-foreground: 158 64% 30%;
+
+    --muted: 160 10% 96%;
+    --muted-foreground: 160 10% 45%;
+
+    --accent: 158 40% 94%;
+    --accent-foreground: 158 64% 30%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 160 15% 90%;
+    --input: 160 15% 90%;
+    --ring: 158 64% 40%;
+
+    --radius: 0.75rem;
+
+    /* Chat specific */
+    --chat-user: 158 64% 40%;
+    --chat-user-foreground: 0 0% 100%;
+    --chat-ai: 160 10% 96%;
+    --chat-ai-foreground: 160 10% 15%;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 160 10% 30%;
+    --sidebar-primary: 158 64% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 158 30% 94%;
+    --sidebar-accent-foreground: 158 64% 30%;
+    --sidebar-border: 160 15% 90%;
+    --sidebar-ring: 158 64% 40%;
+  }
+
+  .dark {
+    --background: 160 15% 8%;
+    --foreground: 160 10% 95%;
+
+    --card: 160 15% 10%;
+    --card-foreground: 160 10% 95%;
+
+    --popover: 160 15% 10%;
+    --popover-foreground: 160 10% 95%;
+
+    --primary: 158 55% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 160 15% 15%;
+    --secondary-foreground: 158 40% 70%;
+
+    --muted: 160 15% 15%;
+    --muted-foreground: 160 10% 60%;
+
+    --accent: 160 20% 18%;
+    --accent-foreground: 158 40% 70%;
+
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 160 15% 18%;
+    --input: 160 15% 18%;
+    --ring: 158 55% 45%;
+
+    /* Chat specific - dark */
+    --chat-user: 158 55% 40%;
+    --chat-user-foreground: 0 0% 100%;
+    --chat-ai: 160 15% 15%;
+    --chat-ai-foreground: 160 10% 90%;
+
+    /* Sidebar - dark */
+    --sidebar-background: 160 15% 6%;
+    --sidebar-foreground: 160 10% 80%;
+    --sidebar-primary: 158 55% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 160 20% 15%;
+    --sidebar-accent-foreground: 158 40% 70%;
+    --sidebar-border: 160 15% 15%;
+    --sidebar-ring: 158 55% 45%;
+  }
 }
 
-html {
-  scroll-behavior: smooth;
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
 }
 
-body {
-  background-color: #f8fafb;
-  color: #1f2937;
-  font-family: system-ui, -apple-system, sans-serif;
-  line-height: 1.5;
-}
-
-@layer components {
-  .container-max {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
   }
   
-  .card-shadow {
-    @apply shadow-md hover:shadow-lg transition-shadow;
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
   }
   
-  .text-medical-primary {
-    @apply text-blue-900;
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
   }
   
-  .text-medical-secondary {
-    @apply text-gray-600;
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 3px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
   }
 }
