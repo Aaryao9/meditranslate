@@ -1,8 +1,21 @@
 // src/controller/auth.controller.ts
 
 import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import { registerUser, loginUser } from "../service/auth.service";
 import { mapUserToResponse } from "../mappers/user.mapper";
+
+const generateToken = (user: any) => {
+  return jwt.sign(
+    {
+      userId: user.id,
+      email: user.email,
+      role: user.role
+    },
+    process.env.JWT_SECRET as string,
+    { expiresIn: "1h" }
+  );
+};
 
 // Register User
 export const register = async (req: Request, res: Response) => {
@@ -17,13 +30,12 @@ export const register = async (req: Request, res: Response) => {
       user: responseUser
     });
   } catch (error: any) {
-    // Duplicate email error in PostgreSQL
     if (error.code === "23505") {
-      return res.status(400).json({ message: "Email already exists ❌" });
+      return res.status(400).json({ message: "Email already exists " });
     }
 
     console.error(error);
-    return res.status(500).json({ message: "Internal server error ❌" });
+    return res.status(500).json({ message: "Internal server error " });
   }
 };
 
@@ -35,13 +47,16 @@ export const login = async (req: Request, res: Response) => {
     const user = await loginUser(email, password);
     const responseUser = mapUserToResponse(user);
 
+    const token = generateToken(user);
+
     return res.status(200).json({
       message: "Login successful",
+      token,
       user: responseUser
     });
   } catch (error: any) {
     return res.status(400).json({
-      message: error.message || "Invalid credentials ❌"
+      message: error.message || "Invalid credentials "
     });
   }
 };
