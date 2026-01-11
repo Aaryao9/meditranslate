@@ -3,7 +3,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import authRoutes from "./src/routes/auth.routes"; 
-import chatRoutes from "./src/routes/chat.routes"
+import chatRoutes from "./src/routes/chat.routes";
+import translationRoutes from "./src/routes/translation.routes";
+
 dotenv.config();
 
 const app = express();
@@ -15,6 +17,7 @@ app.use(express.json());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/chats", chatRoutes);
+app.use("/api/translations", translationRoutes);
 
 // Start server
 app.listen(PORT, () => {
