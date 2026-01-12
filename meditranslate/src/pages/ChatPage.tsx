@@ -62,53 +62,103 @@ const ChatPage: React.FC = () => {
     return responses[Math.floor(Math.random() * responses.length)];
   };
 
-  const handleSendMessage = (content: string, image?: string) => {
-    const userMessage: Message = {
+const handleSendMessage = async (content: string, image?: string) => {
+  const userMessage: Message = {
+    id: crypto.randomUUID(),
+    role: 'user',
+    content: content || 'Please analyze this medical report',
+    image,
+    timestamp: new Date(),
+  };
+
+  const newMessages = [...messages, userMessage];
+  setMessages(newMessages);
+  setIsTyping(true);
+
+  // ===============================
+  // 🔴 IMAGE CHA → API CALL
+  // ===============================
+if (image) {
+  try {
+    const blob = await fetch(image).then(res => res.blob());
+
+    // ✅ Use valid UUID
+    
+    const sessionId = "d433a931-8308-466f-a5a4-42a8207a6116";
+    const formData = new FormData();
+    formData.append("image", blob, "report.png");
+    formData.append("chatSessionId", sessionId);
+
+    const res = await fetch("http://localhost:5000/api/translate", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+
+    const aiMessage: Message = {
       id: crypto.randomUUID(),
-      role: 'user',
-      content: content || 'Please analyze this medical report',
-      image,
+      role: 'ai',
+      content: data.translation.translated_text,
       timestamp: new Date(),
     };
 
-    const newMessages = [...messages, userMessage];
-    setMessages(newMessages);
-    setIsTyping(true);
-
-    // Simulate AI response
-    setTimeout(() => {
-      const aiMessage: Message = {
+    setMessages([...newMessages, aiMessage]);
+  } catch (err) {
+    setMessages([
+      ...newMessages,
+      {
         id: crypto.randomUUID(),
         role: 'ai',
-        content: generateAIResponse(content, !!image),
+        content: '❌ Medical report analyze garna sakena',
+        timestamp: new Date(),
+      },
+    ]);
+  } finally {
+    setIsTyping(false);
+  }
+
+  return;
+}
+
+
+  // ===============================
+  // 🟢 IMAGE CHAINA → OLD CODE SAME
+  // ===============================
+  setTimeout(() => {
+    const aiMessage: Message = {
+      id: crypto.randomUUID(),
+      role: 'ai',
+      content: generateAIResponse(content, false),
+      timestamp: new Date(),
+    };
+
+    const updatedMessages = [...newMessages, aiMessage];
+    setMessages(updatedMessages);
+    setIsTyping(false);
+
+    // Update or create chat (UNCHANGED)
+    const chatTitle = content?.slice(0, 30) || 'Medical Report Analysis';
+    if (currentChatId) {
+      const updatedChats = chats.map((chat) =>
+        chat.id === currentChatId
+          ? { ...chat, lastMessage: content || 'Uploaded report', timestamp: new Date() }
+          : chat
+      );
+      saveChats(updatedChats);
+    } else {
+      const newChat: ChatType = {
+        id: crypto.randomUUID(),
+        title: chatTitle,
+        lastMessage: content || 'Uploaded report',
         timestamp: new Date(),
       };
+      setCurrentChatId(newChat.id);
+      saveChats([newChat, ...chats]);
+    }
+  }, 1500);
+};
 
-      const updatedMessages = [...newMessages, aiMessage];
-      setMessages(updatedMessages);
-      setIsTyping(false);
-
-      // Update or create chat
-      const chatTitle = content?.slice(0, 30) || 'Medical Report Analysis';
-      if (currentChatId) {
-        const updatedChats = chats.map((chat) =>
-          chat.id === currentChatId
-            ? { ...chat, lastMessage: content || 'Uploaded report', timestamp: new Date() }
-            : chat
-        );
-        saveChats(updatedChats);
-      } else {
-        const newChat: ChatType = {
-          id: crypto.randomUUID(),
-          title: chatTitle,
-          lastMessage: content || 'Uploaded report',
-          timestamp: new Date(),
-        };
-        setCurrentChatId(newChat.id);
-        saveChats([newChat, ...chats]);
-      }
-    }, 1500);
-  };
 
   const handleNewChat = () => {
     setCurrentChatId(null);
