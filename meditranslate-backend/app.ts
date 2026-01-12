@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import authRoutes from "./src/routes/auth.routes"; 
 import chatRoutes from "./src/routes/chat.routes";
 import translationRoutes from "./src/routes/translation.routes";
+import ocrRoutes from "./src/routes/ocr.routes";
 
 dotenv.config();
 
@@ -17,7 +18,8 @@ app.use(express.json());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/chats", chatRoutes);
-app.use("/api/translations", translationRoutes);
+app.use("/api/translation", translationRoutes);
+app.use("/api", ocrRoutes);
 
 // Start server
 app.listen(PORT, () => {

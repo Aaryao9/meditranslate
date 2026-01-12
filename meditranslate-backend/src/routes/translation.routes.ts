@@ -1,16 +1,26 @@
-// src/routes/translation.routes.ts
 import express from "express";
 import { validate } from "../middlewares/validate";
-import { createTranslationController, getTranslationsController } from "../controller/translation.controller";
-import { createTranslationSchema } from "../dto/translation.dto";
 import { authenticate } from "../middlewares/auth";
+import { 
+  createTranslationController, 
+  getTranslationsController, 
+  translateOcrController,
+  translatePythonController   // ← matches your controller function name
+} from "../controller/translation.controller";
+import { createTranslationSchema } from "../dto/translation.dto";
 
 const router = express.Router();
 
-// Create a new translation
+// 1️⃣ Create a manual translation (DB-only)
 router.post("/", authenticate, validate(createTranslationSchema), createTranslationController);
 
-// Get translations by chat session
+// 2️⃣ Translate OCR result stored in DB
+router.post("/ocr-translate", authenticate, translateOcrController);
+
+// 3️⃣ Get all translations by chat session
 router.get("/:chatSessionId", authenticate, getTranslationsController);
+
+// 4️⃣ EN → NE translation using Python LoRA model
+router.post("/lora-translate", translatePythonController);
 
 export default router;
