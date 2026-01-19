@@ -37,19 +37,40 @@ const Login: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) return;
+  e.preventDefault();
+  if (!validateForm()) return;
 
-    setIsLoading(true);
-    try {
-      await login(formData.email, formData.password);
-      navigate('/chat');
-    } catch (error) {
-      setErrors({ submit: 'Invalid email or password. Please try again.' });
-    } finally {
-      setIsLoading(false);
+  setIsLoading(true);
+  setErrors({});
+
+  try {
+    // Call your backend API directly
+    const res = await fetch("http://localhost:5000/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: formData.email,
+        password: formData.password,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      // API returned an error
+      throw new Error(data.message || "Login failed");
     }
-  };
+
+    // API succeeded → go to /chat
+    navigate("/chat");
+  } catch (err: any) {
+    setErrors({ submit: err.message || "Invalid email or password. Please try again." });
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

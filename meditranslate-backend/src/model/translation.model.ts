@@ -1,17 +1,30 @@
-// src/models/translation.model.ts
+// src/model/translation.model.ts
 import pool from "../db/pool";
-import { DbTranslation } from "../mappers/translation.mapper";
+
+// TypeScript type for a translation row
+export interface DbTranslation {
+  id: string;
+  chatSessionId: string; // optional
+  originalText: string;
+  translatedText: string;
+  simplifiedText?: string | null;
+  disclaimer?: string | null;
+  language: string; // e.g., "ne"
+  modelVersion?: string | null; // e.g., "LoRA-mt5-small-v1"
+  processingTimeMs?: number | null; // optional
+  createdAt: Date;
+}
 
 // Insert a translation
 export const createTranslation = async (data: {
-  chatSessionId: string;
+  chatSessionId?: string; // optional
   originalText: string;
   translatedText: string;
   simplifiedText?: string;
   disclaimer?: string;
-  language?: string;
-  modelVersion?: string;
-  processingTimeMs?: number;
+  language?: string; // default to "ne"
+  modelVersion?: string | null; // optional
+  processingTimeMs?: number; // optional
 }): Promise<DbTranslation> => {
   const query = `
     INSERT INTO translations
@@ -19,14 +32,13 @@ export const createTranslation = async (data: {
     VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
     RETURNING *
   `;
-
   const values = [
-    data.chatSessionId,
+    data.chatSessionId || null,
     data.originalText,
     data.translatedText,
     data.simplifiedText || null,
     data.disclaimer || null,
-    data.language || "ne",
+    data.language || "ne", // default Nepali
     data.modelVersion || null,
     data.processingTimeMs || null
   ];

@@ -31,7 +31,7 @@ export const createUser = async (
  * @returns The found user or undefined
  */
 export const findUserByEmail = async (email: string) => {
-  const query = `SELECT * FROM users WHERE email = $1`; // * returns password_hash
+  const query = `SELECT * FROM users WHERE email = $1`; 
   const result = await pool.query(query, [email]);
   return result.rows[0];
 };
