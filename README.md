@@ -1,3 +1,65 @@
+# MediTranslate
+English to Nepali Medical Report Translation System
+
+MediTranslate is a domain-adapted English-to-Nepali medical machine translation system designed to improve healthcare accessibility in Nepal. It enhances translation accuracy for medical terminology using Low-Rank Adaptation (LoRA) on top of a pre-trained neural machine translation model. The system also supports scanned and image-based medical reports through Optical Character Recognition (OCR) and provides a web-based interface for easy access.
+
+---
+
+## Abstract
+
+Medical reports in Nepal are commonly written in English using complex medical terminology, making them difficult for many Nepali-speaking patients to understand. MediTranslate addresses this challenge by providing accurate, domain-specific translations from English to Nepali. By applying LoRA-based fine-tuning, the system improves medical translation quality while remaining efficient for low-resource settings. Integrated OCR enables translation of scanned and image-based reports, increasing accessibility and usability.
+
+---
+
+## Features
+
+- English to Nepali medical report translation
+- Domain adaptation using Low-Rank Adaptation (LoRA)
+- Improved medical terminology accuracy
+- OCR support for scanned and image-based reports
+- Web-based frontend and backend
+- Suitable for low-resource language environments
+
+---
+
+## System Architecture
+
+- Pre-trained Transformer-based machine translation model
+- LoRA fine-tuned medical domain adapter
+- OCR module for extracting text from images and PDFs
+- Backend API for translation and processing
+- Web-based frontend for user interaction
+
+---
+
+## Technologies Used
+
+- Python
+- Transformers
+- Low-Rank Adaptation (LoRA)
+- Neural Machine Translation (NMT)
+- Optical Character Recognition (OCR)
+- FastAPI or Flask
+- HTML, CSS, JavaScript
+- Git and GitHub
+
+---
+
+## Project Structure
+
+```text
+MediTranslate/
+│
+├── models/                 # Pre-trained and LoRA-adapted models
+├── ocr/                    # OCR processing modules
+├── translation/            # Translation pipeline
+├── backend/                # Backend server and APIs
+├── frontend/               # Web user interface
+├── data/                   # Medical translation datasets
+├── notebooks/              # Training and evaluation notebooks
+├── requirements.txt
+└── README.md
+```
 ## Installation
 
 Clone the repository and set up the environment.
@@ -86,3 +148,4 @@ docker run -p 8000:8000 meditranslate
 - Medical named entity recognition  
 - Mobile application support  
 - Improved OCR for handwritten medical documents  
+
